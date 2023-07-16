@@ -169,9 +169,11 @@ if check_ext("input.mp4"):
             webbrowser.open("https://ytcutter.com/")
         begin = converttime(input("\nEnter the beginning time to cut: "))
         end = converttime(input("Enter the end time to cut: "))
+        print("Video length is " + str(end - begin))
+        print("Processing...")
         os.system(
             'ffmpeg.exe -v quiet -stats -ss ' + str(begin) + ' -t ' + str(
-                end - begin) + ' -i input.mp4 -y -c:v libx264 -c copy ' + '"' + out_path + convertname(
+                end - begin) + ' -i input.mp4 -y -c:v libx264 ' + '"' + out_path + convertname(
                 out_name) + '.mp4"')
         print("\nFinished Exporting.")
         flag = 1
