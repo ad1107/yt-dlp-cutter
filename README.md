@@ -14,6 +14,8 @@ Clean up unused files before/after export.\
 Option to open directory or video file after export.\
 ytcutter.com is used for visualizing timing.
 
-# Building
+# Using source code
+After downloading the source code, please extract the python.zip folder.\
+You can run the source code directly by using the run.bat file.\
 Use build.bat and enter the version number to release.\
 The build file will be located in the root of the project directory.
