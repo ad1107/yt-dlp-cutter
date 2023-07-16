@@ -142,8 +142,7 @@ if check_ext("input.mp4"):
             "directory as input.")
         out_path = select_path("Select the output directory: ")
         print("\nExporting...")
-        print('ffmpeg.exe -i input.mp4 -c:v libx264 ' + out_path + convertname(out_name) + '.mp4')
-        os.system('ffmpeg.exe -i input.mp4 -c:v libx264 ' + out_path + convertname(out_name) + '.mp4')
+        os.system('ffmpeg.exe -v quiet -stats -i input.mp4 -c:v libx264 ' + out_path + convertname(out_name) + '.mp4')
         print("\nFinished exporting.")
         flag = 1
     elif a == '2':
@@ -159,7 +158,7 @@ if check_ext("input.mp4"):
         begin = float(input("\nEnter the beginning time to cut (seconds): "))
         end = float(input("Enter the end time to cut (seconds): "))
         os.system(
-            'ffmpeg.exe -ss ' + str(begin) + ' -t ' + str(
+            'ffmpeg.exe -v quiet -stats -ss ' + str(begin) + ' -t ' + str(
                 end - begin) + ' -i input.mp4 -y -c:v libx264 -c copy ' + out_path + convertname(out_name) + '.mp4')
         print("\nFinished Exporting.")
         flag = 1
