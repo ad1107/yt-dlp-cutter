@@ -10,6 +10,15 @@ from urllib.request import urlretrieve
 current_dir = os.path.abspath('.') + '\\'
 
 
+def converttime(time_str):
+    parts = time_str.replace(",", ".").split(':')  # support both , and . character.
+    seconds, milliseconds = map(str, parts[-1].split('.'))
+    hours = int(parts[-3]) if len(parts) >= 3 else 0
+    minutes = int(parts[-2]) if len(parts) >= 2 else 0
+    total_seconds = str(hours * 3600 + minutes * 60 + int(seconds)) + '.' + milliseconds
+    return float(total_seconds)
+
+
 def select_path(title):
     root = tk.Tk()
     root.withdraw()
@@ -141,6 +150,7 @@ if check_ext("input.mp4"):
             "Please select the output directory, if you close the window, the video will be saved at the same "
             "directory as input.")
         out_path = select_path("Select the output directory: ")
+        print("\nYour path: " + out_path)
         print("\nExporting...")
         os.system('ffmpeg.exe -v quiet -stats -i input.mp4 -c:v libx264 ' + '"' + out_path + convertname(
             out_name) + '.mp4"')
@@ -152,12 +162,13 @@ if check_ext("input.mp4"):
             "Please select the output directory, if you close the window, the video will be saved at the same "
             "directory as input.")
         out_path = select_path("Select the output directory: ")
+        print("\nYour path: " + out_path)
         web = input('\nPress 1 to visualize video for cutting: ')
         if web == "1":
             print("Opening website on your default browser...")
             webbrowser.open("https://ytcutter.com/")
-        begin = float(input("\nEnter the beginning time to cut (seconds): "))
-        end = float(input("Enter the end time to cut (seconds): "))
+        begin = converttime(input("\nEnter the beginning time to cut: "))
+        end = converttime(input("Enter the end time to cut: "))
         os.system(
             'ffmpeg.exe -v quiet -stats -ss ' + str(begin) + ' -t ' + str(
                 end - begin) + ' -i input.mp4 -y -c:v libx264 -c copy ' + '"' + out_path + convertname(
