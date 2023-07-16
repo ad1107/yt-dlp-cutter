@@ -192,7 +192,7 @@ if check_ext("input.mp4"):
             os.system('explorer ' + out_path.replace("/", "\\"))
         if input("\nPress 1 if you want to play the video using your default video player: ") == "1":
             print("\nOpening video file..")
-            os.system(out_path + convertname(out_name) + '.mp4')
+            os.system(out_path + "'" + convertname(out_name) + '.mp4"')
     else:
         print("Exporting failed. Please try again.\n")
     os.system('pause')
