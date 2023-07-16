@@ -5,10 +5,12 @@ Automatically cut or save videos from Youtube.
 Video will be automatically downloaded at the best quality and resolution, and converted to H264 codec for output.
 
 # Features
+Automatically check for missing required files\
 Tkinter (gui) is used for selecting folder.\
 Improved compatibility using libx264 codec from ffmpeg for output.\
 ffmpeg now only shows progress bar.\
 yt-dlp now merge input file as mp4 (vp90).\
+Clean up unused files before/after export.\
 Option to open directory or video file after export.\
 ytcutter.com is used for visualizing timing.
 
