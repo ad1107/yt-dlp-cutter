@@ -1,22 +1,23 @@
 import os
 import sys
 import time
+import tkinter as tk
 import webbrowser
 import zipfile
+from tkinter import filedialog
 from urllib.request import urlretrieve
 
-current_dir = os.path.abspath('.')
+current_dir = os.path.abspath('.') + '\\'
 
 
-def convertpath(path):
-    if len(path.strip()) == 0:
-        return path
-    elif path[-1] != '/' and '/' in path:
+def select_path(title):
+    root = tk.Tk()
+    root.withdraw()
+    path = filedialog.askdirectory(title=title)
+    if path:
         return path + '/'
-    elif path[-1] != '\\' and '\\' in path:
-        return path + "\\"
     else:
-        return path
+        return current_dir
 
 
 def convertname(name):
@@ -66,7 +67,7 @@ def download_yt_exe():
 
 def download_ffmpeg_zip():
     download(
-        'https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-lgpl.zip',
+        'https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip',
         'ffmpeg.zip')
 
 
@@ -108,17 +109,13 @@ else:
 os.system("cls")
 print("Step 3: Remove residual files")
 
-print("Deleting old input files if exist...")
+print("Deleting old input and/or output files if exist...")
+if check_ext(".mp4"):
+    os.system('del *.mp4 /s /q /f')
 if check_ext(".webm"):
     os.system('del *.webm /s /q /f')
 else:
-    print("All input files has already been cleared.")
-
-print("\nDeleting old output files if exist...")
-if check_ext(".mp4"):
-    os.system('del *.mp4 /s /q /f')
-else:
-    print("All output files has already been cleared.")
+    print("All input and/or output files has already been cleared.")
 
 print("\nDeleting ffmpeg.zip after extraction (if exists)...")
 if os.path.isfile('ffmpeg.zip'):
@@ -129,55 +126,64 @@ os.system("cls")
 video_link = input("Please paste the video link: ")
 
 print("\nDownloading original video: ")
-os.system('yt-dlp ' + '"' + video_link + '"' + ' --no-playlist -o input.webm')
+os.system('yt-dlp ' + '"' + video_link + '"' + ' --no-playlist --merge-output-format mp4 -o input.mp4')
 
-if check_ext(".webm"):
+if check_ext("input.mp4"):
     os.system("cls")
     print("""Please select between these options:
     1. Save the entire video
     2. Cut the video""")
-    a = int(input("\nInput your number here: "))
+    a = input("\nInput your number here: ")
     flag = 0
-    if a == 1:
+    if a == '1':
         out_name = input("\nType your output name, if blank, the name will be 'output.mp4': ")
-        out_path = input("Type your output path, if blank, the video will be kept at the same folder as input: ")
+        print(
+            "Please select the output directory, if you close the window, the video will be saved at the same "
+            "directory as input.")
+        out_path = select_path("Select the output directory: ")
         print("\nExporting...")
-        print('ffmpeg.exe -i input.webm ' + convertpath(out_path) + convertname(out_name) + '.mp4')
-        os.system('ffmpeg.exe -i input.webm ' + convertpath(out_path) + convertname(out_name) + '.mp4')
+        print('ffmpeg.exe -i input.mp4 -c:v libx264 ' + out_path + convertname(out_name) + '.mp4')
+        os.system('ffmpeg.exe -i input.mp4 -c:v libx264 ' + out_path + convertname(out_name) + '.mp4')
         print("\nFinished exporting.")
         flag = 1
-    elif a == 2:
+    elif a == '2':
         out_name = input("\nType your output name, if blank, the name will be 'output.mp4': ")
-        out_path = input("Type your output path, if blank, the video will be kept at the same folder as input: ")
+        print(
+            "Please select the output directory, if you close the window, the video will be saved at the same "
+            "directory as input.")
+        out_path = select_path("Select the output directory: ")
         web = input('\nPress 1 to visualize video for cutting: ')
         if web == "1":
             print("Opening website on your default browser...")
             webbrowser.open("https://ytcutter.com/")
         begin = float(input("\nEnter the beginning time to cut (seconds): "))
         end = float(input("Enter the end time to cut (seconds): "))
-        print('ffmpeg.exe -ss ' + str(begin) + ' -t ' + str(end - begin) + ' -i input.webm -y -c copy ' + convertpath(
-            out_path) + convertname(out_name) + '.mp4')
         os.system(
-            'ffmpeg.exe -ss ' + str(begin) + ' -t ' + str(end - begin) + ' -i input.webm -y -c copy ' + convertpath(
-                out_path) + convertname(out_name) + '.mp4')
+            'ffmpeg.exe -ss ' + str(begin) + ' -t ' + str(
+                end - begin) + ' -i input.mp4 -y -c:v libx264 -c copy ' + out_path + convertname(out_name) + '.mp4')
         print("\nFinished Exporting.")
         flag = 1
+
     print("\nDeleting leftover input file")
-    os.system('del *.webm /s /q /f')
+    if check_ext("input.mp4"):
+        os.system('del input.mp4 /s /q /f')
+    if check_ext(".webm"):
+        os.system('del *.webm /s /q /f')
 
     os.system("cls")
     print("Finished.\n")
     if flag == 1:
         if len(out_path) == 0: out_path = current_dir
-        print("Exported video: " + convertpath(out_path) + convertname(out_name) + '.mp4\n')
-        play = input("Press 1 if you want to play the video using your default video player: ")
-        if play == "1":
-            print("\nOpening video file...")
-            os.system(convertpath(out_path) + convertname(out_name) + '.mp4')
+        print("Exported video: " + out_path + convertname(out_name) + '.mp4\n')
+        if input("Press 1 if you want to open the directory contain the output file: ") == "1":
+            print("\nOpening the directory...")
+            os.system('explorer ' + out_path.replace("/", "\\"))
+        if input("\nPress 1 if you want to play the video using your default video player: ") == "1":
+            print("\nOpening video file..")
+            os.system(out_path + convertname(out_name) + '.mp4')
     else:
         print("Exporting failed. Please try again.\n")
-    print("\n")
     os.system('pause')
 else:
-    print("Cannot download video. Please try again.\n")
+    print("\nCannot download video. Please try again.\n")
     os.system("pause")
