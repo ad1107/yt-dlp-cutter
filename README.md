@@ -1,5 +1,5 @@
 # yt-dlp-cutter
-Automatically cut or save videos from Youtube.
+Automatically cut and save videos from Youtube.\
 Video will be automatically downloaded in the highest quality and resolution, and converted to ``mp4`` with codec ``H264``.
 
 # Features
