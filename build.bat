@@ -1,24 +1,53 @@
 @echo off
-set /p ver=Enter version number:
+REM ============================================================
+REM Build Script for yt-dlp-cutter Portable Executable
+REM ============================================================
+
+set /p ver="Enter version number: "
 cls
-echo Installing PyInstaller...
-echo:
-pip install pyinstaller
+
+echo [INFO] Installing PyInstaller...
+pip install pyinstaller || (
+    echo [ERROR] Failed to install PyInstaller.
+    pause
+    exit /b 1
+)
 cls
-echo Building executable...
-echo:
-pyinstaller --onefile main.py
+
+echo [INFO] Building executable from main.py...
+pyinstaller --onefile main.py || (
+    echo [ERROR] Build process failed.
+    pause
+    exit /b 1
+)
 cls
-echo Moving file to root destination...
-echo:
-cd dist
-move main.exe ..
-cd ..
-rmdir dist
-ren main.exe yt-dlp-cutter-%ver%.exe
-del *.spec /s /q /f
-rmdir build /s /f
+
+echo [INFO] Moving built executable to project root...
+pushd dist
+if exist main.exe (
+    move main.exe ..
+) else (
+    echo [ERROR] main.exe not found in the dist directory.
+    popd
+    pause
+    exit /b 1
+)
+popd
+
+rmdir /s /q dist
+
+if exist main.exe (
+    ren main.exe yt-dlp-cutter-%ver%.exe
+) else (
+    echo [ERROR] main.exe not found in the project root.
+    pause
+    exit /b 1
+)
+
+:: Remove PyInstaller build artifacts
+del /s /q *.spec
+rmdir /s /q build
+
 cls
-echo Complete building version %ver%.
-echo:
+echo [SUCCESS] Build complete: yt-dlp-cutter-%ver%.exe
 pause

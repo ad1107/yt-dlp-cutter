@@ -1,18 +1,23 @@
 # yt-dlp-cutter
-Automatically cut and save videos from Youtube.\
-Video will be automatically downloaded in the highest quality and resolution, and converted to ``mp4`` with codec ``H264``.
 
-# Features
-Automatically check for missing required files\
-``Tkinter`` (gui) is used for selecting folder.\
-Improved compatibility using ``libx264`` codec from ffmpeg for output.\
-ffmpeg now only shows progress bar.\
-``yt-dlp`` now merge input file as ``mp4`` ``(vp90)``.\
-Clean up unused files before/after export.\
-Option to open directory or video file after export.\
-``ytcutter.com`` is used for visualizing timing.
+Automatically cut videos from YouTube using yt-dlp and ffmpeg.
+Now with improved/maintainable script!
 
-# Using the source code
-After download, extract the ``python.zip`` folder.\
-You can run the code directly by using the ``run.bat`` file.\
-Use ``build.bat`` to release a version, the build file will be located in the root of the directory.
+## Overview
+
+This project downloads a YouTube video and either saves the entire video or cuts out a specific segment based on user input. It uses:
+- **yt-dlp** for downloading YouTube videos.
+- **ffmpeg** for processing the video.
+- **tkinter** for GUI-based directory selection.
+- **requests** and **tqdm** for enhanced download progress display.
+
+## Usage
+1. Install the required libraries:
+    ```
+    pip install -r requirements.txt
+    ```
+2. Run the script:
+    ```
+    python main.py
+    ```
+3. Follow the on-screen instructions.
