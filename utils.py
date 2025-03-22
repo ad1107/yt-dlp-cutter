@@ -9,9 +9,12 @@ current_dir = os.path.abspath('.') + '\\'
 start_time = None
 
 def converttime(time_str):
-    parts = time_str.replace(',', '.').split(':')
-    return sum(int(x) * 60**(i+1) for i, x in enumerate(reversed(parts[:-1]))) + float(parts[-1])
-
+    parts = time_str.replace(",", ".").split(':')  # support both , and . character.
+    seconds, milliseconds = map(str, parts[-1].split('.'))
+    hours = int(parts[-3]) if len(parts) >= 3 else 0
+    minutes = int(parts[-2]) if len(parts) >= 2 else 0
+    total_seconds = str(hours * 3600 + minutes * 60 + int(seconds)) + '.' + milliseconds
+    return float(total_seconds)
 
 def select_path(title):
     root = tk.Tk()
