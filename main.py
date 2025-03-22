@@ -1,4 +1,3 @@
-import os
 from dependency import manage_dependencies
 from video_processor import VideoProcessor
 

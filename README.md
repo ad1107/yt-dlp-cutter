@@ -1,13 +1,15 @@
-# yt-dlp-cutter
+# Youtube Cutter (Based on yt-dlp)
+## (yt-dlp-cutter)
 
-Automatically cut videos from YouTube using yt-dlp and ffmpeg.
+Automatically download and cut video or audio from YouTube using yt-dlp and ffmpeg.
+
 Now with improved/maintainable script!
 
 ## Overview
 
-This project downloads a YouTube video and either saves the entire video or cuts out a specific segment based on user input. It uses:
+This project downloads a YouTube media and either saves the entire video/audio or cuts out a specific segment based on user input. It uses:
 - **yt-dlp** for downloading YouTube videos.
-- **ffmpeg** for processing the video.
+- **ffmpeg** for processing media files.
 - **tkinter** for GUI-based directory selection.
 - **requests** and **tqdm** for enhanced download progress display.
 
