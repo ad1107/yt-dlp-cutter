@@ -9,12 +9,9 @@ current_dir = os.path.abspath('.') + '\\'
 start_time = None
 
 def converttime(time_str):
-    parts = time_str.replace(",", ".").split(':')  # support both , and . character.
-    seconds, milliseconds = map(str, parts[-1].split('.'))
-    hours = int(parts[-3]) if len(parts) >= 3 else 0
-    minutes = int(parts[-2]) if len(parts) >= 2 else 0
-    total_seconds = str(hours * 3600 + minutes * 60 + int(seconds)) + '.' + milliseconds
-    return float(total_seconds)
+    parts = time_str.replace(',', '.').split(':')
+    return sum(int(x) * 60**(i+1) for i, x in enumerate(reversed(parts[:-1]))) + float(parts[-1])
+
 
 def select_path(title):
     root = tk.Tk()
@@ -31,18 +28,17 @@ def convertname(name):
     else:
         return name
 
-def percentage(count, block_size, total_size):
-    global start_time
+def progress(count, block_size, total_size):
     if count == 0:
-        start_time = time.time()
+        progress.start = time.time()
         return
-    duration = time.time() - start_time
-    progress_size = int(count * block_size)
-    speed = int(progress_size / (1024 * duration)) if duration > 0 else 0
-    percent = min(int(count * block_size * 100 / total_size), 100)
-    time_remaining = ((total_size - progress_size) / 1024) / speed if speed > 0 else 0
-    sys.stdout.write("\r%d%%, %d MB, %d KB/s, ETA: %d seconds" % (
-        percent, progress_size / (1024 * 1024), speed, time_remaining))
+    elapsed = time.time() - progress.start
+    current = count * block_size
+    pct = min(current * 100 / total_size, 100)
+    speed = current / elapsed if elapsed else 0 
+    eta = (total_size - current) / speed if speed else 0
+    bar = '#' * int(pct / 2) + '-' * (50 - int(pct / 2))
+    sys.stdout.write(f"\r[{bar}] {pct:.0f}% | {current/(1024*1024):.1f} MB | {speed/1024:.1f} KB/s | ETA: {eta:.0f}s")
     sys.stdout.flush()
 
 def check_ext(ext):

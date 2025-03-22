@@ -1,7 +1,7 @@
 import os
 import zipfile
 from urllib.request import urlretrieve
-from utils import current_dir, percentage
+from utils import current_dir, progress
 
 def extract_file(zip_path, file_name, output_path):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -17,7 +17,7 @@ def extract_file(zip_path, file_name, output_path):
 def download(url, name):
     print("Downloading " + name + ":")
     work_path = os.path.join(current_dir, name)
-    urlretrieve(url, work_path, percentage)
+    urlretrieve(url, work_path, progress)
     print('\n')
 
 def download_yt_exe():

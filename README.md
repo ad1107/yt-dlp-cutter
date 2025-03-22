@@ -11,15 +11,13 @@ This project downloads a YouTube media and either saves the entire video/audio o
 - **yt-dlp** for downloading YouTube videos.
 - **ffmpeg** for processing media files.
 - **tkinter** for GUI-based directory selection.
-- **requests** and **tqdm** for enhanced download progress display.
+- Mostly no external libraries required.
 
 ## Usage
-1. Install the required libraries:
-    ```
-    pip install -r requirements.txt
-    ```
-2. Run the script:
-    ```
-    python main.py
-    ```
+1. Clone the repo/Download zip.
+
+(Highly recommended to check out the portable 1-click executable on the Releases tab)
+
+2. Run `main.py`
+
 3. Follow the on-screen instructions.
